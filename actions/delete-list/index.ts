@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
 
-import { DeleteCard } from "./schema";
+import { DeleteList } from "./schema";
 import { InputType, ReturnType } from "./types";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
@@ -21,24 +21,23 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   const { id, boardId } = data;
-  let card;
+  let list;
 
   try {
-    card = await db.card.delete({
+    list = await db.list.delete({
       where: {
         id,
-        list: {
-          board: {
-            orgId,
-          },
+        boardId,
+        board: {
+          orgId,
         },
       },
     });
 
     await createAuditLog({
-      entityTitle: card.title,
-      entityId: card.id,
-      entityType: ENTITY_TYPE.CARD,
+      entityTitle: list.title,
+      entityId: list.id,
+      entityType: ENTITY_TYPE.LIST,
       action: ACTION.DELETE,
     })
   } catch (error) {
@@ -48,7 +47,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   revalidatePath(`/board/${boardId}`);
-  return { data: card };
+  return { data: list };
 };
 
-export const deleteCard = createSafeAction(DeleteCard, handler);
+export const deleteList = createSafeAction(DeleteList, handler);
