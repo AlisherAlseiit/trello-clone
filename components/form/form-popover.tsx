@@ -1,21 +1,23 @@
 "use client";
 
 import { ElementRef, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  PopoverClose
+  PopoverClose,
 } from "@/components/ui/popover";
 import { useAction } from "@/hooks/use-action";
-import { createBoard } from "@/actions/create-board";
 import { Button } from "@/components/ui/button";
+import { createBoard } from "@/actions/create-board";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 import { FormInput } from "./form-input";
-import { FormSubmit } from "./form-submit"; 
-import { X } from "lucide-react";
+import { FormSubmit } from "./form-submit";
 import { FormPicker } from "./form-picker";
 
 interface FormPopoverProps {
@@ -31,6 +33,7 @@ export const FormPopover = ({
   align,
   sideOffset = 0,
 }: FormPopoverProps) => {
+  const proModal = useProModal();
   const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
 
@@ -42,6 +45,7 @@ export const FormPopover = ({
     },
     onError: (error) => {
       toast.error(error);
+      proModal.onOpen();
     }
   });
 
@@ -61,17 +65,17 @@ export const FormPopover = ({
         align={align}
         className="w-80 pt-3"
         side={side}
-        sideOffset={sideOffset} 
-      >      
+        sideOffset={sideOffset}
+      >
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">
-          Create Board
+          Create board
         </div>
         <PopoverClose ref={closeRef} asChild>
           <Button
             className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
             variant="ghost"
           >
-            <X className="h-4 w-4"/>
+            <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
         <form action={onSubmit} className="space-y-4">
@@ -80,7 +84,7 @@ export const FormPopover = ({
               id="image"
               errors={fieldErrors}
             />
-            <FormInput 
+            <FormInput
               id="title"
               label="Board title"
               type="text"
