@@ -3,10 +3,12 @@ Start Project
 
 npx create-next-app@latest trello-tutorial  <-- create project
 
+![installation (1)](https://github.com/AlisherAlseiit/trello-clone/assets/63951641/3c2fe01a-fead-4f60-ad94-bca7072340f7)
 
 
 npm shadcn-ui@latest init
 
+![installation](https://github.com/AlisherAlseiit/trello-clone/assets/63951641/a8108c3a-ab56-4bd2-a77e-eaf20797c866)
 
 
 npm run dev
